@@ -1,5 +1,5 @@
 package exe3KnockKnock;
-//Hello test
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,6 +30,8 @@ public class ClientHandler implements Runnable{
 
             String inputLine, outputLine;
 
+
+            //If the client is on port 4444
             if (port.equals("KNOCK")){
 
 
@@ -48,6 +50,7 @@ public class ClientHandler implements Runnable{
                 in.close();
                 clientSocket.close();
 
+                //If the client is on port 4445
             } else {
 
                 RuppinRegistrationProtocol rrp = new RuppinRegistrationProtocol();

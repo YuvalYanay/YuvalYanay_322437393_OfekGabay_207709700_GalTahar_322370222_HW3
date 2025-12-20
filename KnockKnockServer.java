@@ -11,6 +11,7 @@ public class KnockKnockServer {
         int PORT1 = 4444;
         int PORT2 = 4445;
 
+        //Running threads for ports
         new Thread(() -> {
 
             try(ServerSocket serverSocket = new ServerSocket(PORT1)) {
