@@ -5,16 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 public class ClientHandler implements Runnable{
 
     private final Socket clientSocket;
     private final String port;
+    private List<Client> clients;
 
-    public  ClientHandler(Socket socket, String port){
+    public  ClientHandler(Socket socket, String port, List<Client> clientState){
 
         clientSocket = socket;
         this.port = port;
+        clients = clientState;
 
     }
 
@@ -53,14 +56,16 @@ public class ClientHandler implements Runnable{
                 //If the client is on port 4445
             } else {
 
-                RuppinRegistrationProtocol rrp = new RuppinRegistrationProtocol();
-                outputLine = rrp.processInput(null);
+                RuppinRegistrationProtocol rrp = new RuppinRegistrationProtocol(clients);
+                outputLine = rrp.inputProcessing(null);
                 out.println(outputLine);
 
                 while ((inputLine = in.readLine()) != null) {
                     if (inputLine.equals("q"))  break;
-                    outputLine = rrp.processInput(inputLine);
+
+                    outputLine = rrp.inputProcessing(inputLine);
                     out.println(outputLine);
+
 
                 }
                 out.close();

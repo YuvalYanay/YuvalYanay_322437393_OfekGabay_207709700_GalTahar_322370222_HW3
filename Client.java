@@ -19,8 +19,27 @@ public Client(String username, String password, String academicStat, int years){
 
 
 //Setters
-public void setUsername(String username){ this.username = username; }
-public void setPassword(String password){this.password = password; }
+public void setUsername(String username) throws IllegalArgumentException{
+
+    if(username.trim().isEmpty() || username == null){
+
+        throw new IllegalArgumentException("Username cannot be empty.");
+
+    }
+
+    this.username = username;
+}
+public void setPassword(String password) throws IllegalArgumentException{
+
+    if(password.trim().isEmpty() || password == null){
+
+        throw new IllegalArgumentException("Password cannot be empty.");
+
+    }
+
+    this.password = password;
+}
+
 public void setAcademicStat(String academicStat){
 
     if (academicStat.equalsIgnoreCase("student")){
@@ -34,8 +53,8 @@ public void setAcademicStat(String academicStat){
 }
 public void setYears(int years) throws IllegalArgumentException{
 
-    if(years < 1){
-        throw new IllegalArgumentException("Cannot have negative year.");
+    if(years < 0){
+        throw new IllegalArgumentException("Cannot be a negative year.");
     }
 
     this.years = years;

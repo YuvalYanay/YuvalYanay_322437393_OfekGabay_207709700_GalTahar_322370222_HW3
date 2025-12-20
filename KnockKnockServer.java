@@ -1,13 +1,17 @@
 package exe3KnockKnock;
 import java.net.*;
 import java.io.*;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class KnockKnockServer {
     public static void main(String[] args) throws IOException {
 
         System.out.println("Echo server is starting...");
-        List<Client> clientState = new List<Client>();
+        List<Client> clientState = java.util.Collections.synchronizedList(new java.util.ArrayList<>()); //In order to work with multiple threads
+
         int PORT1 = 4444;
         int PORT2 = 4445;
 
@@ -19,7 +23,7 @@ public class KnockKnockServer {
                 while (true) {
 
                     Socket socket = serverSocket.accept();
-                    new Thread(new ClientHandler(socket,"KNOCK")).start();
+                    new Thread(new ClientHandler(socket,"KNOCK", clientState)).start();
 
                 }
 
@@ -39,7 +43,7 @@ public class KnockKnockServer {
                 while (true) {
 
                     Socket socket = serverSocket.accept();
-                    new Thread(new ClientHandler(socket,"RUPPIN")).start();
+                    new Thread(new ClientHandler(socket,"RUPPIN", clientState)).start();
 
                 }
 
