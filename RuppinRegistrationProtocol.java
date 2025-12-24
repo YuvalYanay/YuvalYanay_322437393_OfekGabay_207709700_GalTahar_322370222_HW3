@@ -63,26 +63,35 @@ public String inputProcessing(String theInput){
 
         case LOGIN_USERNAME:
 
-            if (isExisted(theInput)){ //Checking if the user exits
+            synchronized (clients){
 
-                for (Client c : clients){
+                if (isExisted(theInput)){ //Checking if the user exits
 
-                    if (c.getUsername().equals(theInput)){
+                    for (Client c : clients){
 
-                        temp = c; //Getting the user's details
-                        break;
+                        if (c.getUsername().equals(theInput)){
 
+                            temp = c; //Getting the user's details
+                            break;
+
+                        }
                     }
+
+                    theOutput = "Password:";
+                    state = LOGIN_PASSWORD;
+
+                }
+                else {
+                    theOutput = "User not found. Username:";
                 }
 
-                theOutput = "Password:";
-                state = LOGIN_PASSWORD;
+            }
 
-            }
-            else {
-                theOutput = "User not found. Username:";
-            }
+
             break;
+
+
+
 
         case LOGIN_PASSWORD:
 
@@ -141,7 +150,7 @@ public String inputProcessing(String theInput){
                     theOutput = "Username updated successfully. Do you want to change your password? (yes/no)";
                     state = UPDATE_PASSWORD;
                 }
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 theOutput = "Username cannot be empty. Try again:";
             }
 
@@ -177,7 +186,8 @@ public String inputProcessing(String theInput){
                 }
 
 
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
+                theOutput = "Password cannot be empty. Try again:";
             }
             break;
 
@@ -232,8 +242,9 @@ public String inputProcessing(String theInput){
                     theOutput = "Checking name... Ok. Enter a strong password:";
                     state = ASK_PASSWORD;
                 }
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 theOutput = "Username cannot be empty. Try again:";
+                state = ASK_USERNAME;
             }
 
 
@@ -271,10 +282,14 @@ public String inputProcessing(String theInput){
             try{
                 int years = Integer.parseInt(theInput);
                 temp.setYears(years);
-                clients.add(temp);
-                if (clients.size() % 3 == 0) {
-                    saveToCSV();
+
+                synchronized (clients){
+                    clients.add(temp);
+                    if (clients.size() % 3 == 0) {
+                        saveToCSV();
+                    }
                 }
+
                 theOutput = "Registration completed.";
                 state = WAITING;
             } catch (Exception e) {
@@ -302,7 +317,9 @@ public boolean isExisted(String username){ //Checks if the user already exits
 
     Client search = new Client(username,"0","",0);
 
-    return clients.contains(search); //Going to the equals method for checking identical usernames
+    synchronized (clients){
+        return clients.contains(search); //Going to the equals method for checking identical usernames
+    }
 }
 
 

@@ -1,16 +1,35 @@
 package exe3KnockKnock;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class KnockKnockClient {
+
 	public static void main(String[] args) throws IOException {
 
 		Socket kkSocket = null;
 		PrintWriter out = null;
 		BufferedReader in = null;
+        int port;
+
+        Scanner sc = new Scanner(System.in);
+
+        while (true){
+            System.out.println("Please enter your port: ");
+            port = sc.nextInt();
+            sc.nextLine();
+
+            if (port == 4444 || port == 4445){
+                break;
+            }
+            else {
+                System.out.println("Invalid port!");
+            }
+        }
+
 
 		try {
-			kkSocket = new Socket("127.0.0.1", 4444);
+			kkSocket = new Socket("127.0.0.1", port);
 			out = new PrintWriter(kkSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
 		} catch (UnknownHostException e) {
@@ -29,6 +48,16 @@ public class KnockKnockClient {
 			System.out.println("Server: " + fromServer);
 			if (fromServer.equals("Bye."))
 				break;
+
+
+            String lowerServer = fromServer.toLowerCase();
+
+            if (lowerServer.contains("registration completed") ||
+                    lowerServer.contains("goodbye") ||
+                    lowerServer.contains("information has been updated") ||
+                    lowerServer.contains("remains the same")) {
+                break;
+            }
 
 			fromUser = stdIn.readLine();
 			if (fromUser != null) {

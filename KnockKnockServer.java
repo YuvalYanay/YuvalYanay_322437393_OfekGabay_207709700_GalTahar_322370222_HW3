@@ -9,21 +9,18 @@ import java.util.ListIterator;
 public class KnockKnockServer {
     public static void main(String[] args) throws IOException {
 
-        System.out.println("Echo server is starting...");
-        List<Client> clientState = java.util.Collections.synchronizedList(new java.util.ArrayList<>()); //In order to work with multiple threads
-
+        System.out.println("KnockKnock server is starting...");
+//        List<Client> clientState = java.util.Collections.synchronizedList(new java.util.ArrayList<>()); //In order to work with multiple threads
         int PORT1 = 4444;
-        int PORT2 = 4445;
 
         //Running threads for ports
-        new Thread(() -> {
 
             try(ServerSocket serverSocket = new ServerSocket(PORT1)) {
 
                 while (true) {
 
                     Socket socket = serverSocket.accept();
-                    new Thread(new ClientHandler(socket,"KNOCK", clientState)).start();
+                    new Thread(new ClientHandler(socket,"KNOCK", null)).start();
 
                 }
 
@@ -33,27 +30,26 @@ public class KnockKnockServer {
 
             }
 
-        }).start();
 
 
-        new Thread(() -> {
-
-            try(ServerSocket serverSocket = new ServerSocket(PORT2)) {
-
-                while (true) {
-
-                    Socket socket = serverSocket.accept();
-                    new Thread(new ClientHandler(socket,"RUPPIN", clientState)).start();
-
-                }
-
-            } catch (IOException e) {
-
-                System.err.println("Error on port 4445: " + e.getMessage());
-
-            }
-
-        }).start();
+//        new Thread(() -> {
+//
+//            try(ServerSocket serverSocket = new ServerSocket(PORT2)) {
+//
+//                while (true) {
+//
+//                    Socket socket = serverSocket.accept();
+//                    new Thread(new ClientHandler(socket,"RUPPIN", clientState)).start();
+//
+//                }
+//
+//            } catch (IOException e) {
+//
+//                System.err.println("Error on port 4445: " + e.getMessage());
+//
+//            }
+//
+//        }).start();
 
 //        try {
 //            serverSocket = new ServerSocket(PORT1);

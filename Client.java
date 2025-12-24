@@ -21,7 +21,7 @@ public Client(String username, String password, String academicStat, int years){
 //Setters
 public void setUsername(String username) throws IllegalArgumentException{
 
-    if(username.trim().isEmpty() || username == null){
+    if(username == null || username.trim().isEmpty()){
 
         throw new IllegalArgumentException("Username cannot be empty.");
 
@@ -29,6 +29,7 @@ public void setUsername(String username) throws IllegalArgumentException{
 
     this.username = username;
 }
+
 public void setPassword(String password) throws IllegalArgumentException{
 
     if(password.trim().isEmpty() || password == null){
